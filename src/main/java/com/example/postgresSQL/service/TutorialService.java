@@ -27,6 +27,7 @@ public class TutorialService {
         this.tutorialRepository = tutorialRepository;
     }
 
+	// Get all the tutorials
     public List<Tutorial> findAll(String title) {
         List<Tutorial> tutorials = new ArrayList<Tutorial>();
         if (title == null)
@@ -37,13 +38,46 @@ public class TutorialService {
         return tutorials;
     }
 
+    // Get one tutorial
+    public Optional<Tutorial> findById(Long id) {
+        Optional<Tutorial> tutorialData = tutorialRepository.findById(id);
+        return tutorialData;
+    }
+
+    // Create a tutorial
     public Tutorial create(Tutorial tutorial) {
         Tutorial copy = new Tutorial(
             tutorial.getTitle(),
             tutorial.getDescription(),
-            false
+            tutorial.isPublished()
         );
         return tutorialRepository.save(copy);
+    }
+
+    // Update a tutorial
+    public Tutorial update(Long id, Tutorial newTutorial) {
+        Tutorial _tutorial = tutorialRepository.getById(id);
+        _tutorial.setTitle(newTutorial.getTitle());
+        _tutorial.setDescription(newTutorial.getDescription());
+        _tutorial.setPublished(newTutorial.isPublished());
+        tutorialRepository.save(_tutorial);
+        return _tutorial;
+    }
+
+    // Delete a tutorial
+    public void delete(Long id) {
+        tutorialRepository.deleteById(id);
+    }
+
+    // Delete all tutorials
+    public void deleteAll() {
+        tutorialRepository.deleteAll();
+    }
+
+    // Get all published as true
+    public List<Tutorial> findByPublished(Boolean status) {
+        List<Tutorial> tutorials = tutorialRepository.findByPublished(status);
+        return tutorials;
     }
 
 }
